@@ -1,0 +1,36 @@
+v4l2-ctl -d /dev/video0 --set-parm=5
+xhost +local:root
+docker compose -f docker-compose_Node_1.yaml up --force-recreate
+
+docker compose -f docker-compose_wildfire_classifier.yaml up -d wildfire_classifier
+
+docker compose -f docker-compose_wildfire_classifier.yaml stop wildfire_classifier
+docker compose -f docker-compose_wildfire_classifier.yaml rm -f wildfire_class
+docker compose -f docker-compose_wildfire_classifier.yaml logs -f wildfire_classifier
+
+python3 - <<'PY'
+import socket, json, time
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+for _ in range(3):
+    s.sendto(json.dumps({"label":"FIRE"}).encode(), ("127.0.0.1", 5006))
+    time.sleep(0.2)
+print("sent 3 FIRE alerts")
+PY
+
+
+command: >
+      python3 -m nano_llm.vision.video
+      --model Efficient-Large-Model/VILA-2.7b
+      --max-images 15
+      --max-new-tokens 48
+      --video-input /dev/video0
+      --video-output display://0
+      --prompt "describe the scene in detail, and what is happening in it"
+
+docker compose -f docker-compose_metrics_logger.yaml down
+docker compose -f docker-compose_metrics_logger.yaml build --no-cache
+docker compose -f docker-compose_metrics_logger.yaml up
+
+#most important 
+docker compose -f docker-compose_complete_system.yaml run --rm -e VIDEO_INPUT="/dev/video0" -e VIDEO_OUTPUT="display://0" wildfire_detection
+
