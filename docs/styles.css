@@ -108,6 +108,10 @@ img {
   padding-top: 88px;
 }
 
+.landing-hero {
+  min-height: auto;
+}
+
 .conference {
   margin: 0 0 12px;
   color: var(--accent);
@@ -152,6 +156,13 @@ h4 {
   font-size: 1.16rem;
 }
 
+.hero-copy {
+  max-width: 880px;
+  margin: 0 auto 28px;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
 .authors {
   margin: 0 auto 30px;
   color: var(--text);
@@ -174,6 +185,59 @@ h4 {
 
 .content-block {
   margin-top: 34px;
+}
+
+.cta-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin: 34px auto 0;
+  text-align: left;
+}
+
+.cta-card {
+  min-height: 128px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: #fff;
+  text-decoration: none;
+}
+
+.cta-card span {
+  color: var(--accent-dark);
+  font-weight: 900;
+  font-size: 1.1rem;
+}
+
+.cta-card small {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.cta-card.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.cta-card.primary span,
+.cta-card.primary small {
+  color: #fff;
+}
+
+.cta-card.disabled {
+  background: var(--soft);
+  cursor: not-allowed;
+}
+
+.disabled-link {
+  color: #667386 !important;
+  cursor: not-allowed;
 }
 
 .plain-list {
@@ -264,6 +328,56 @@ figcaption {
   gap: 16px;
 }
 
+.author-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.author-card {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  text-align: center;
+}
+
+.avatar-placeholder {
+  width: 132px;
+  height: 132px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  border: 1px solid #b9c7d8;
+  border-radius: 50%;
+  color: var(--accent-dark);
+  background: var(--soft);
+  font-weight: 900;
+  font-size: 2.25rem;
+}
+
+.avatar-placeholder.has-photo {
+  background-position: center;
+  background-size: cover;
+  color: transparent;
+}
+
+.author-card h3 {
+  margin-bottom: 6px;
+}
+
+.author-card p {
+  margin: 0 0 18px;
+  color: var(--muted);
+}
+
+.author-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
 .card {
   min-width: 0;
   padding: 18px;
@@ -299,6 +413,35 @@ figcaption {
 
 .spec-table span {
   color: var(--muted);
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 26px 0;
+}
+
+.metrics div {
+  min-height: 98px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--soft);
+}
+
+.metrics strong {
+  display: block;
+  color: var(--accent-dark);
+  font-size: 1.65rem;
+  line-height: 1.1;
+}
+
+.metrics span {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.93rem;
 }
 
 .details {
@@ -413,8 +556,14 @@ pre {
   }
 
   .media-grid,
-  .card-grid {
+  .card-grid,
+  .cta-grid,
+  .author-grid {
     grid-template-columns: 1fr;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .spec-table div {
@@ -430,5 +579,9 @@ pre {
 
   .hero {
     padding-top: 64px;
+  }
+
+  .metrics {
+    grid-template-columns: 1fr;
   }
 }

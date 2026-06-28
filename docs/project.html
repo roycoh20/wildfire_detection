@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Info | Real-Time Edge Wildfire Detection System</title>
+    <meta name="description" content="Project information for the real-time edge wildfire detection system.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="brand" href="index.html">Real-Time Wildfire Detection</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="nav-links" id="nav-links">
+          <a href="index.html">Home</a>
+          <a href="#general-info">General Info</a>
+          <a href="#results">Results</a>
+          <a href="#sd-express-report">SD Express Student Challenge Report</a>
+          <a href="#project-presentation">Project Presentation</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero section" id="general-info">
+        <p class="conference">Project Information</p>
+        <h1>Real-Time Edge Wildfire Detection System</h1>
+        <p class="subtitle">Technical overview, reported evaluation metrics, and storage-focused SD Express challenge summary.</p>
+        <figure class="teaser">
+          <img src="assets/images/project_teaser.jpg" alt="Wildfire scene representing the monitored event type.">
+          <figcaption>Target scenario: early fire or smoke cues that should be reviewed quickly by a human operator.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section">
+        <h2>General Info</h2>
+        <p class="kicker">Real-Time Edge Wildfire Detection System</p>
+
+        <div class="content-block">
+          <h3>Project Overview</h3>
+          <p>The system detects wildfire and smoke events from a live camera stream on an NVIDIA Jetson Orin Nano. A vision-language model describes the scene, a semantic text classifier decides whether the description indicates wildfire or smoke, and the system can trigger alerts and save recent video as evidence for human verification.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>System Architecture</h3>
+          <div class="architecture" role="img" aria-label="Camera to VLM video container to scene description over UDP to classifier container to decision to UDP alert and overlay logs circular buffer evidence clip.">
+            <div class="arch-node">Camera</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-node">VLM / video container</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-node muted">Scene description</div>
+            <div class="arch-arrow">↓ UDP</div>
+            <div class="arch-node">Classifier container</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-node decision">WILDFIRE / NO_WILDFIRE decision</div>
+            <div class="arch-arrow">↓ UDP alert</div>
+            <div class="arch-node">Overlay / logs / circular buffer / evidence clip</div>
+          </div>
+          <div class="card-grid architecture-notes">
+            <article class="card"><h4>Camera</h4><p>Captures the monitored outdoor scene.</p></article>
+            <article class="card"><h4>VLM / video container</h4><p>Samples frames and generates text descriptions.</p></article>
+            <article class="card"><h4>UDP</h4><p>Sends short low-latency text messages between services.</p></article>
+            <article class="card"><h4>Classifier container</h4><p>Classifies the VLM text using a semantic MNLI model.</p></article>
+            <article class="card"><h4>Alert logic</h4><p>Reduces false alerts by requiring repeated wildfire decisions.</p></article>
+            <article class="card"><h4>Circular buffer</h4><p>Stores recent video so the system can save the seconds around an event.</p></article>
+          </div>
+        </div>
+
+        <div class="media-grid">
+          <figure>
+            <img src="assets/images/jetson_orin_nano.png" alt="NVIDIA Jetson Orin Nano developer kit.">
+            <figcaption>Target edge platform: NVIDIA Jetson Orin Nano.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/images/pipeline_demo.png" alt="Runtime screenshot showing detector and classifier terminal windows.">
+            <figcaption>Runtime view of the video/VLM service and classifier service running as separate components.</figcaption>
+          </figure>
+        </div>
+
+        <div class="content-block">
+          <h3>Main Technical Specifications</h3>
+          <div class="spec-table" role="table" aria-label="Main technical specifications">
+            <div role="row"><strong role="cell">Platform</strong><span role="cell">NVIDIA Jetson Orin Nano</span></div>
+            <div role="row"><strong role="cell">Camera input</strong><span role="cell">High-resolution RGB input; report mentions 1920x1080 at 30 FPS, presentation mentions 4K at 15 FPS in one demo setup</span></div>
+            <div role="row"><strong role="cell">VLM</strong><span role="cell">Compact VILA model variant suitable for Jetson deployment</span></div>
+            <div role="row"><strong role="cell">Model note</strong><span role="cell">The live system was tested with compact VILA variants. The exact model version should be verified against the final runtime configuration before final deployment.</span></div>
+            <div role="row"><strong role="cell">Classifier</strong><span role="cell">typeform/distilbert-base-uncased-mnli</span></div>
+            <div role="row"><strong role="cell">Classifier method</strong><span role="cell">Zero-shot / MNLI semantic classification</span></div>
+            <div role="row"><strong role="cell">Communication</strong><span role="cell">UDP between containers</span></div>
+            <div role="row"><strong role="cell">Runtime</strong><span role="cell">Docker Compose</span></div>
+            <div role="row"><strong role="cell">Main image</strong><span role="cell">dustynv/nano_llm:r36.4.0</span></div>
+            <div role="row"><strong role="cell">Storage role</strong><span role="cell">Logs, evidence clips, rolling buffers, model/runtime data, and swap support</span></div>
+          </div>
+        </div>
+
+        <div class="content-block">
+          <h3>Why These Choices?</h3>
+          <div class="card-grid">
+            <article class="card"><h4>Why a camera?</h4><p>Affordable, scalable, and provides visual evidence for human verification.</p></article>
+            <article class="card"><h4>Why a VLM?</h4><p>Early fire may appear as smoke, glow, haze, distant flame, or scene context rather than a clean object. A VLM gives a semantic scene description.</p></article>
+            <article class="card"><h4>Why MNLI?</h4><p>The VLM output is text. MNLI lets the classifier compare that text with wildfire/no-wildfire hypotheses without training a custom classifier from scratch.</p></article>
+            <article class="card"><h4>Why UDP?</h4><p>Messages are short and time-sensitive. A fresh scene description is more useful than a delayed reliable backlog.</p></article>
+            <article class="card"><h4>Why Docker?</h4><p>The VLM, classifier, and monitoring tools can be developed, tested, and replaced separately.</p></article>
+            <article class="card"><h4>Why fast storage?</h4><p>The system handles inference plus logs, rolling buffers, evidence clips, and swap. Slow storage may create delays or instability.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="results">
+        <h2>Results</h2>
+        <p class="section-lede">The reported evaluation summaries prioritize recall and false-negative reduction, because missing a real wildfire is more dangerous than sending a false alert for human verification.</p>
+        <div class="card-grid">
+          <article class="card">
+            <h3>Dataset</h3>
+            <p>37 tagged wildfire videos and 37 tagged no-wildfire videos. The set included edge cases such as fog, nighttime, smoke-only scenes, distant fire, sunset/sunrise, and confusing visual conditions.</p>
+          </article>
+          <article class="card">
+            <h3>Operating Threshold</h3>
+            <p>T = 0.32, chosen to prioritize minimizing false negatives. For wildfire detection, recall is treated as the critical metric.</p>
+          </article>
+          <article class="card">
+            <h3>Evaluation Note</h3>
+            <p>The metrics below are presented as reported evaluation metrics. They should be rechecked against the final conference report before publication.</p>
+          </article>
+        </div>
+        <div class="metrics">
+          <div><strong>30</strong><span>True Positives (TP)</span></div>
+          <div><strong>0</strong><span>False Negatives (FN)</span></div>
+          <div><strong>1</strong><span>False Positives (FP)</span></div>
+          <div><strong>29</strong><span>True Negatives (TN)</span></div>
+          <div><strong>96.77%</strong><span>Accuracy</span></div>
+          <div><strong>100%</strong><span>Recall / Sensitivity</span></div>
+          <div><strong>96.77%</strong><span>Precision</span></div>
+          <div><strong>3.3%</strong><span>False Positive Rate</span></div>
+          <div><strong>0%</strong><span>False Negative Rate</span></div>
+        </div>
+        <p class="section-lede">A smaller presentation test split reported 92.8% accuracy, 100% recall, and 0% FNR. The consistent point across the reported summaries is the priority on high recall and avoiding missed fire cases.</p>
+
+        <div class="content-block">
+          <h3>Known Failure Modes and Lessons</h3>
+          <div class="card-grid">
+            <article class="card"><h4>Fog versus smoke</h4><p>Fog may be semantically close to smoke. Mitigation: add stronger fog and no-fire semantic labels.</p></article>
+            <article class="card"><h4>False fire sentence</h4><p>A VLM can occasionally produce a false fire sentence. Mitigation: require repeated WILDFIRE classifications in a time window.</p></article>
+            <article class="card"><h4>Split probabilities</h4><p>A real fire sentence may split probability across fire, smoke, and burning labels. Mitigation: aggregate over the full fire-label list instead of relying only on the maximum single label.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sd-express-report">
+        <h2>SD Express Student Challenge Report</h2>
+        <p class="kicker">Real-Time Wildfire Detection</p>
+        <p class="section-lede">The SD Express challenge report focused on showing how fast removable storage can support a real-time edge AI workload.</p>
+        <div class="card-grid">
+          <article class="card">
+            <h3>Storage Role</h3>
+            <p>The storage device supports rolling video buffers, evidence clips, logs, model/runtime data, and an 8 GB swap file due to limited Jetson RAM.</p>
+          </article>
+          <article class="card">
+            <h3>Test Setup</h3>
+            <p>The system was tested on recorded wildfire footage and live camera input using a Jetson Orin Nano, Dockerized VLM and classifier services, and semantic wildfire/no-wildfire decisions.</p>
+          </article>
+          <article class="card">
+            <h3>Storage Finding</h3>
+            <p>The report says microSD Express performed comparably to SSD under the tested workload and helped sustain real-time detection workloads without making storage the bottleneck.</p>
+          </article>
+        </div>
+
+        <div class="media-grid graph-grid">
+          <figure>
+            <img src="assets/images/sd_express_read_throughput.png" alt="Read throughput over time comparing MicroSD Express and SSD.">
+            <figcaption>Read throughput during a real-time wildfire inference workload.</figcaption>
+            <div class="graph-explanation">
+              <p><strong>Why this graph is shown:</strong> It evaluates whether storage read speed becomes a bottleneck while the edge-AI pipeline is running.</p>
+              <p><strong>What it means:</strong> The x-axis is elapsed time in seconds, and the y-axis is read throughput in MB/s. The two lines compare MicroSD Express and SSD under the same workload style.</p>
+              <p><strong>Conclusion:</strong> Under this tested workload, read activity is bursty rather than constant. MicroSD Express shows enough throughput headroom for the observed bursts, though final deployment should be verified with the exact camera and model settings.</p>
+            </div>
+          </figure>
+          <figure>
+            <img src="assets/images/sd_express_swap_usage.png" alt="Swap usage over time comparing MicroSD Express and SSD.">
+            <figcaption>Swap usage while running the edge AI pipeline.</figcaption>
+            <div class="graph-explanation">
+              <p><strong>Why this graph is shown:</strong> It shows how much the Jetson relies on disk-backed swap while running the workload.</p>
+              <p><strong>What it means:</strong> The x-axis is elapsed time in seconds, and the y-axis is swap usage percentage. Rising swap means RAM pressure is being absorbed by storage.</p>
+              <p><strong>Conclusion:</strong> Swap use increases during the run, so fast storage is relevant for stability. The result supports using fast removable storage for constrained edge AI workloads.</p>
+            </div>
+          </figure>
+        </div>
+
+        <div class="download-panel">
+          <span class="button disabled" aria-disabled="true" data-download="assets/reports/sd_express_student_challenge_report.pdf" data-ready-label="Download SD Express Report">Download SD Express Report</span>
+          <p>The final report PDF will be added when available.</p>
+        </div>
+      </section>
+
+      <section class="section narrow" id="project-presentation">
+        <h2>Project Presentation</h2>
+        <p>Presentation will be added soon.</p>
+        <span class="button disabled" aria-disabled="true" data-download="assets/reports/project_presentation.pdf" data-ready-label="Download Project Presentation">Presentation coming soon</span>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Real-Time Wildfire Detection · Technion, Israel Institute of Technology · IMVC Conference</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

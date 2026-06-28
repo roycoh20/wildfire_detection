@@ -1,6 +1,11 @@
 # GitHub Pages Site
 
-This folder contains the static IMVC conference page for the real-time edge wildfire detection project.
+This folder contains the static IMVC conference site for the real-time edge wildfire detection project.
+
+## Pages
+
+- `index.html`: landing page with project, author, LinkedIn, and CV entry points.
+- `project.html`: full project information page with technical overview, reported results, SD Express report summary, and presentation placeholder.
 
 ## Preview locally
 
@@ -23,13 +28,11 @@ py -m http.server 8000
 
 ## Publish on GitHub Pages
 
-1. Push the `docs/` folder to `main`.
-2. Go to repository **Settings**.
-3. Open **Pages**.
-4. Select **Deploy from a branch**.
-5. Select branch **main**.
-6. Select folder **/docs**.
-7. Save.
+Use:
+
+```text
+Settings -> Pages -> Deploy from branch -> main -> /docs
+```
 
 Expected public URL:
 
@@ -51,13 +54,17 @@ https://roycoh20.github.io/wildfire_detection/
 - The previous report document asset was removed from `docs/assets`.
 - The previous presentation asset was removed from `docs/assets` until a final complete version is provided.
 - The old confusion matrix image was removed because it came from the unfinished Project A report.
-- The old demo video asset was removed from the public Pages folder because the new public structure does not include a demo/presentation section.
+- The old demo video asset was removed from the public Pages folder because the new public structure does not include a demo section.
 
 ## TODO
 
-- Add Roy Cohen CV at `docs/assets/cv/roy_cohen_cv.pdf`.
-- Add Itay Hovav CV at `docs/assets/cv/itay_hovav_cv.pdf`.
-- Add the final SD Express report PDF at `docs/assets/reports/sd_express_student_challenge_report.pdf`.
-- Add final Project A presentation only when the complete version is provided.
-- Verify exact VLM model version used in the final demo.
-- Verify exact camera resolution/FPS used in the final demo.
+- TODO: Add Roy Cohen LinkedIn URL.
+- TODO: Add Itay Hovav LinkedIn URL.
+- TODO: Add Roy Cohen CV at `docs/assets/cv/roy_cohen_cv.pdf`.
+- TODO: Add Itay Hovav CV at `docs/assets/cv/itay_hovav_cv.pdf`.
+- TODO: Add Roy Cohen photo at `docs/assets/images/roy_cohen.jpg`.
+- TODO: Add Itay Hovav photo at `docs/assets/images/itay_hovav.jpg`.
+- TODO: Add the final SD Express report PDF at `docs/assets/reports/sd_express_student_challenge_report.pdf`.
+- TODO: Add final project presentation PDF at `docs/assets/reports/project_presentation.pdf`.
+- TODO: Verify final exact VLM model version before conference.
+- TODO: Verify final exact camera resolution/FPS before conference.
