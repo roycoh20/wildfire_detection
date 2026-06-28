@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EmberEye: Real-Time Edge Wildfire Detection</title>
+    <meta name="description" content="Conference project page for EmberEye, a Jetson-based real-time edge wildfire detection system.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="brand" href="#home">EmberEye</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="nav-links" id="nav-links">
+          <a href="#home">Home</a>
+          <a href="#abstract">Abstract</a>
+          <a href="#system">System</a>
+          <a href="#method">Method</a>
+          <a href="#results">Results</a>
+          <a href="#demo">Demo</a>
+          <a href="#cv">CV</a>
+          <a href="#code">Code</a>
+          <a href="#citation">Citation</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="home">
+      <section class="hero section">
+        <p class="conference">IMVC Conference</p>
+        <h1>EmberEye: Real-Time Edge Wildfire Detection</h1>
+        <p class="subtitle">A Jetson-based system that uses vision-language AI and semantic classification to detect wildfire and smoke events from a live camera stream.</p>
+        <p class="authors">
+          Roy Cohen · Itay Hovav<br>
+          Advisor: Harel Yadid<br>
+          Technion, Israel Institute of Technology
+        </p>
+        <div class="actions" aria-label="Project links">
+          <a class="button primary" href="https://github.com/roycoh20/wildfire_detection">Code</a>
+          <a class="button" href="assets/project_report.docx">Report</a>
+          <a class="button" href="assets/final_presentation.pptx">Presentation</a>
+          <a class="button" href="#demo">Demo Video</a>
+        </div>
+        <figure class="teaser">
+          <img src="assets/project_teaser.jpg" alt="Wildfire scene used as a visual teaser for the EmberEye project.">
+          <figcaption>EmberEye targets early fire and smoke cues near the ground, where fast local decisions can support human verification.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section narrow" id="abstract">
+        <h2>Abstract</h2>
+        <p>
+          Wildfires require early detection, but human watchtowers, satellites, and wide-area monitoring systems can be limited by cost, coverage, latency, or image resolution. EmberEye explores an edge-AI pipeline for detecting early fire and smoke signs close to the camera source. The system runs on an NVIDIA Jetson Orin Nano and processes a live camera feed with a compact vision-language model. Scene descriptions are sent over UDP to a lightweight MNLI zero-shot classifier that decides whether the text indicates wildfire or smoke. Fast storage supports rolling video buffers, evidence clips, logs, and swap during real-time inference. The project was tested on recorded wildfire footage and live camera input. According to the project report, the evaluation prioritized low false negatives and achieved high recall on the tested data.
+        </p>
+      </section>
+
+      <section class="section" id="system">
+        <h2>System</h2>
+        <p class="section-lede">
+          The system is organized as a modular Docker Compose pipeline. A vision-language service describes frames, a classifier service interprets the description, and the video layer overlays alerts while keeping a circular evidence buffer.
+        </p>
+        <div class="architecture" role="img" aria-label="Camera to VLM to UDP text stream to MNLI classifier to wildfire alert and evidence clip.">
+          <div class="arch-node">Camera</div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node">wildfire_detection container</div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node">Vision-Language Model</div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node muted">Scene description text</div>
+          <div class="arch-arrow">↓ UDP</div>
+          <div class="arch-node">wildfire_classifier container</div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node">MNLI semantic classification</div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node decision">WILDFIRE / NO_WILDFIRE</div>
+          <div class="arch-arrow">↓ UDP alert</div>
+          <div class="arch-node">Video overlay + circular buffer + evidence clip</div>
+        </div>
+        <div class="media-grid">
+          <figure>
+            <img src="assets/jetson_orin_nano.png" alt="NVIDIA Jetson Orin Nano developer kit.">
+            <figcaption>Target edge platform: NVIDIA Jetson Orin Nano.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/pipeline_demo.png" alt="Runtime screenshot showing Jetson terminal windows for the detector and classifier services.">
+            <figcaption>Runtime services communicate through short UDP messages to avoid stale processing backlog.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section" id="method">
+        <h2>Method</h2>
+        <div class="card-grid">
+          <article class="card">
+            <h3>1. Scene Understanding with VLM</h3>
+            <p>The project evaluates compact VILA variants suitable for Jetson deployment. The prompt asks the model to describe the scene in detail and report whether smoke is visible, balancing broad scene understanding with smoke sensitivity.</p>
+            <code>describe the scene in detail, and what is happening in it. Do you see smoke?</code>
+          </article>
+          <article class="card">
+            <h3>2. UDP Text Streaming</h3>
+            <p>The VLM emits scene descriptions to the classifier over UDP. Messages are short, latency matters, and dropping an occasional stale packet is preferable to accumulating a delayed queue.</p>
+          </article>
+          <article class="card">
+            <h3>3. MNLI Semantic Classification</h3>
+            <p>The classifier uses <code>typeform/distilbert-base-uncased-mnli</code> for zero-shot comparison against wildfire and no-fire semantic labels. The threshold is tuned toward low false negatives.</p>
+          </article>
+          <article class="card">
+            <h3>4. Alert and Evidence Clip</h3>
+            <p>Repeated WILDFIRE decisions within a time window trigger an alert. The video module overlays status and saves recent frames from a circular buffer as an evidence clip for later review.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="results">
+        <h2>Results</h2>
+        <p class="section-lede">
+          The project report emphasizes recall and false-negative reduction, because missed wildfire events are the most critical failure mode.
+        </p>
+        <div class="metrics">
+          <div><strong>96.77%</strong><span>Accuracy</span></div>
+          <div><strong>100%</strong><span>Recall</span></div>
+          <div><strong>96.77%</strong><span>Precision</span></div>
+          <div><strong>0%</strong><span>False-negative rate</span></div>
+          <div><strong>3.3%</strong><span>False-positive rate</span></div>
+          <div><strong>1080p</strong><span>Camera/video target</span></div>
+        </div>
+        <div class="media-grid">
+          <figure>
+            <img src="assets/confusion_matrix.png" alt="Confusion matrix from the project report.">
+            <figcaption>Confusion matrix extracted from the project report.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/sd_express_graph_1.png" alt="Read throughput graph comparing MicroSD Express and SSD during inference.">
+            <figcaption>Storage throughput during real-time wildfire video inference.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/sd_express_graph_2.png" alt="Swap usage graph comparing MicroSD Express and SSD during inference.">
+            <figcaption>Swap behavior while running the model pipeline.</figcaption>
+          </figure>
+        </div>
+        <div class="limitations">
+          <h3>Observed Limitations</h3>
+          <ul>
+            <li>Fog and smoke-like scenes can confuse semantic labels.</li>
+            <li>Occasional VLM hallucinations can create false alerts.</li>
+            <li>Borderline cases depend on score competition between candidate labels.</li>
+            <li>Mitigations include stronger no-fire labels, N-fire alert windows, and aggregate scoring over fire-label groups.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="demo">
+        <h2>Demo</h2>
+        <figure class="demo">
+          <video controls preload="metadata" poster="assets/pipeline_demo.png">
+            <source src="assets/demo_recording.webm" type="video/webm">
+          </video>
+          <figcaption>Live camera frames are described by the VLM and classified by the semantic fire/no-fire classifier in real time.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section narrow" id="cv">
+        <h2>Roy Cohen - CV</h2>
+        <p>Electrical Engineering student at the Technion, focused on embedded AI, computer vision, signal processing, and real-time systems.</p>
+      </section>
+
+      <section class="section" id="code">
+        <h2>Code</h2>
+        <p>The runtime project is maintained at <a href="https://github.com/roycoh20/wildfire_detection">github.com/roycoh20/wildfire_detection</a>.</p>
+        <pre><code>xhost +local:root
+v4l2-ctl -d /dev/video0 --set-parm=15
+docker compose -f docker-compose_complete_system.yaml run --rm \
+  -e VIDEO_INPUT="/dev/video0" \
+  -e VIDEO_OUTPUT="display://0" \
+  wildfire_detection</code></pre>
+      </section>
+
+      <section class="section narrow" id="citation">
+        <h2>Citation</h2>
+        <pre><code>@misc{cohen2026embereye,
+  title       = {EmberEye: Real-Time Edge Wildfire Detection},
+  author      = {Roy Cohen and Itay Hovav},
+  year        = {2026},
+  institution = {Technion -- Israel Institute of Technology},
+  note        = {IMVC conference project page}
+}</code></pre>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>EmberEye · Technion, Israel Institute of Technology · IMVC Conference</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

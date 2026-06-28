@@ -5,6 +5,8 @@ The system uses a camera feed, a Vision-Language Model (VLM), and a semantic cla
 
 The system is containerized with Docker Compose and is intended to run directly on a Jetson device with a connected camera.
 
+Project page: https://roycoh20.github.io/wildfire_detection/
+
 ---
 
 ## System Overview
