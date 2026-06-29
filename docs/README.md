@@ -48,9 +48,14 @@ https://roycoh20.github.io/wildfire_detection/
 - `assets/images/sd_express_read_throughput.png`
 - `assets/images/sd_express_swap_usage.png`
 
-## Materials Folder Status
+## Materials Added
 
-No current `materials`, `materials/current`, `materials_current`, or `materials current` folder was found in the repository snapshot used for this update. CVs, LinkedIn URLs, author photos, the SD Express PDF, and the final presentation remain placeholders until those files are added.
+The following files were copied from the local project Materials folder:
+
+- `Roy Cohen CV.pdf` -> `assets/cv/roy_cohen_cv.pdf`
+- `Itay_Hovav_CV.pdf` -> `assets/cv/itay_hovav_cv.pdf`
+- `System for Real-Time Detection of Wildfires.pdf` -> `assets/reports/sd_express_student_challenge_report.pdf`
+- `wildfire_detection_presentation.pptx` -> `assets/reports/project_presentation.pptx`
 
 ## Hidden or Removed From Public Site
 
@@ -64,12 +69,8 @@ No current `materials`, `materials/current`, `materials_current`, or `materials 
 
 - TODO: Add Roy Cohen LinkedIn URL.
 - TODO: Add Itay Hovav LinkedIn URL.
-- TODO: Add Roy Cohen CV at `docs/assets/cv/roy_cohen_cv.pdf`.
-- TODO: Add Itay Hovav CV at `docs/assets/cv/itay_hovav_cv.pdf`.
 - TODO: Add Roy Cohen photo at `docs/assets/images/roy_cohen.jpg`.
 - TODO: Add Itay Hovav photo at `docs/assets/images/itay_hovav.jpg`.
-- TODO: Add the final SD Express report PDF at `docs/assets/reports/sd_express_student_challenge_report.pdf`.
-- TODO: Add final project presentation PDF at `docs/assets/reports/project_presentation.pdf`.
 - TODO: Verify final exact VLM model version before conference.
 - TODO: Verify final exact camera resolution/FPS before conference.
 - TODO: Verify final JetPack / Jetson Linux version if not explicit in repo.
