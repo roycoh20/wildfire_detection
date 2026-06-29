@@ -48,6 +48,10 @@ https://roycoh20.github.io/wildfire_detection/
 - `assets/images/sd_express_read_throughput.png`
 - `assets/images/sd_express_swap_usage.png`
 
+## Materials Folder Status
+
+No current `materials`, `materials/current`, `materials_current`, or `materials current` folder was found in the repository snapshot used for this update. CVs, LinkedIn URLs, author photos, the SD Express PDF, and the final presentation remain placeholders until those files are added.
+
 ## Hidden or Removed From Public Site
 
 - The unfinished Hebrew Project A report is not linked, summarized, or used as a public source.
@@ -68,3 +72,4 @@ https://roycoh20.github.io/wildfire_detection/
 - TODO: Add final project presentation PDF at `docs/assets/reports/project_presentation.pdf`.
 - TODO: Verify final exact VLM model version before conference.
 - TODO: Verify final exact camera resolution/FPS before conference.
+- TODO: Verify final JetPack / Jetson Linux version if not explicit in repo.

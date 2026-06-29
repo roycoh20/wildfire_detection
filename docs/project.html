@@ -99,6 +99,27 @@
         </div>
 
         <div class="content-block">
+          <h3>Software Stack</h3>
+          <div class="spec-table" role="table" aria-label="Software stack">
+            <div role="row"><strong role="cell">Jetson software</strong><span role="cell">Jetson Linux / JetPack-compatible r36.4.0 runtime image</span></div>
+            <div role="row"><strong role="cell">Container image</strong><span role="cell">dustynv/nano_llm:r36.4.0</span></div>
+            <div role="row"><strong role="cell">Runtime</strong><span role="cell">Docker Compose</span></div>
+            <div role="row"><strong role="cell">GPU access</strong><span role="cell">NVIDIA container runtime</span></div>
+            <div role="row"><strong role="cell">Main VLM service</strong><span role="cell">wildfire_detection</span></div>
+            <div role="row"><strong role="cell">Classifier service</strong><span role="cell">wildfire_classifier</span></div>
+            <div role="row"><strong role="cell">Metrics service</strong><span role="cell">metrics_logger is referenced in project commands, but no service file is present in the current repository snapshot</span></div>
+            <div role="row"><strong role="cell">VLM runtime</strong><span role="cell">NanoLLM / Jetson CUDA stack</span></div>
+            <div role="row"><strong role="cell">Classifier runtime</strong><span role="cell">Hugging Face Transformers</span></div>
+            <div role="row"><strong role="cell">Classifier model</strong><span role="cell">typeform/distilbert-base-uncased-mnli</span></div>
+            <div role="row"><strong role="cell">Classifier device</strong><span role="cell">CPU, configured with <code>device=-1</code></span></div>
+            <div role="row"><strong role="cell">Communication</strong><span role="cell">UDP: VLM to classifier on port 5005, classifier alert back on port 5006</span></div>
+            <div role="row"><strong role="cell">Video input</strong><span role="cell">/dev/video0 when using the live camera</span></div>
+            <div role="row"><strong role="cell">Video output</strong><span role="cell">display://0 when running the live display</span></div>
+            <div role="row"><strong role="cell">Storage/logging</strong><span role="cell">Classifier JSONL output, clips, logs, and optional swap support</span></div>
+          </div>
+        </div>
+
+        <div class="content-block">
           <h3>Why These Choices?</h3>
           <div class="card-grid">
             <article class="card"><h4>Why a camera?</h4><p>Affordable, scalable, and provides visual evidence for human verification.</p></article>
@@ -192,7 +213,7 @@
         </div>
 
         <div class="download-panel">
-          <span class="button disabled" aria-disabled="true" data-download="assets/reports/sd_express_student_challenge_report.pdf" data-ready-label="Download SD Express Report">Download SD Express Report</span>
+          <span class="button disabled" aria-disabled="true" data-download="assets/reports/sd_express_student_challenge_report.pdf" data-ready-label="Download SD Express Student Challenge Report">Download SD Express Student Challenge Report</span>
           <p>The final report PDF will be added when available.</p>
         </div>
       </section>
