@@ -67,8 +67,6 @@ The following files were copied from the local project Materials folder:
 
 ## TODO
 
-- TODO: Add Roy Cohen LinkedIn URL.
-- TODO: Add Itay Hovav LinkedIn URL.
 - TODO: Add Roy Cohen photo at `docs/assets/images/roy_cohen.jpg`.
 - TODO: Add Itay Hovav photo at `docs/assets/images/itay_hovav.jpg`.
 - TODO: Verify final exact VLM model version before conference.
